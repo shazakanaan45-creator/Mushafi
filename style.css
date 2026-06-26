@@ -6,7 +6,7 @@
 
 body{
   direction:rtl;
-  font-family:Tahoma, Arial, sans-serif;
+  font-family:Arial, Tahoma, sans-serif;
   background:radial-gradient(circle at top right,#fff8e8 0,#f6eedc 40%,#efe3c8 100%);
   color:#082f23;
 }
@@ -69,6 +69,7 @@ button{
   font-size:16px;
   font-weight:bold;
   box-shadow:0 5px 14px rgba(0,0,0,.18);
+  font-family:Arial, Tahoma, sans-serif;
 }
 
 button:hover{
@@ -88,12 +89,14 @@ button:hover{
   font-size:17px;
   outline:none;
   box-shadow:0 6px 18px rgba(0,0,0,.08);
+  font-family:Arial, Tahoma, sans-serif;
 }
 
 .section-title{
   margin:20px 0 15px;
   font-size:26px;
   color:#00442f;
+  font-family:Arial, Tahoma, sans-serif;
 }
 
 .surah-list{
@@ -125,7 +128,11 @@ button:hover{
   color:#00442f;
   font-size:21px;
   margin-bottom:6px;
-  font-weight:bold;
+  font-weight:700;
+  line-height:1.6;
+  letter-spacing:0;
+  white-space:normal;
+  font-family:Arial, Tahoma, sans-serif !important;
 }
 
 .surah-card span{
@@ -133,6 +140,7 @@ button:hover{
   font-size:14px;
   background:none;
   padding:0;
+  font-family:Arial, Tahoma, sans-serif;
 }
 
 .surah-number{
@@ -147,6 +155,7 @@ button:hover{
   justify-content:center;
   font-weight:bold;
   box-shadow:0 4px 12px rgba(0,0,0,.15);
+  font-family:Arial, Tahoma, sans-serif;
 }
 
 .surah-arrow{
@@ -189,7 +198,7 @@ button:hover{
   font-size:42px;
   margin:10px 0;
   font-weight:bold;
-  font-family:Tahoma, Arial, sans-serif;
+  font-family:Arial, Tahoma, sans-serif;
   text-align:center;
   text-shadow:0 2px 5px rgba(0,0,0,.4);
 }
@@ -198,6 +207,7 @@ button:hover{
   color:#FFF7DD;
   font-size:18px;
   margin-top:8px;
+  font-family:Arial, Tahoma, sans-serif;
 }
 
 .ornament{
@@ -232,6 +242,7 @@ button:hover{
   padding:4px 9px;
   font-size:18px;
   margin-right:8px;
+  font-family:Arial, Tahoma, sans-serif;
 }
 
 .basmala-box{
@@ -252,9 +263,32 @@ button:hover{
   text-shadow:0 1px 2px rgba(0,0,0,.15);
 }
 
+.app-footer{
+  text-align:center;
+  margin-top:50px;
+  padding:25px 15px;
+  color:#666;
+  border-top:1px solid rgba(0,0,0,.08);
+  font-size:15px;
+  font-family:Arial, Tahoma, sans-serif;
+}
+
+.app-footer strong{
+  color:#006847;
+}
+
+.app-footer span{
+  display:block;
+  margin-top:8px;
+  font-size:13px;
+  color:#999;
+}
+
 .hidden{
   display:none;
 }
+
+/* Dark Mode */
 
 .dark{
   background:linear-gradient(135deg,#061b15,#0b3327);
@@ -262,10 +296,32 @@ button:hover{
 }
 
 .dark .home-card,
-.dark .surah-card,
 .dark .ayah-container{
   background:#102820;
   color:white;
+}
+
+.dark .surah-card{
+  background:#16352B;
+  border:1px solid #d4af37;
+  color:white;
+}
+
+.dark .surah-card h3{
+  color:#F7D27A;
+}
+
+.dark .surah-card span{
+  color:#EDE6C5;
+}
+
+.dark .surah-number{
+  background:linear-gradient(135deg,#F7D27A,#BD8D2F);
+  color:#003F2D;
+}
+
+.dark .surah-arrow{
+  color:#F7D27A;
 }
 
 .dark .section-title{
@@ -275,6 +331,19 @@ button:hover{
 .dark input{
   background:#102820;
   color:white;
+}
+
+.dark .app-footer{
+  color:#cfcfcf;
+  border-top:1px solid rgba(255,255,255,.1);
+}
+
+.dark .app-footer strong{
+  color:#F7D27A;
+}
+
+.dark .app-footer span{
+  color:#999;
 }
 
 @media(max-width:700px){
@@ -302,77 +371,4 @@ button:hover{
   button{
     width:100%;
   }
-}/* ===== إصلاح ألوان الوضع الليلي ===== */
-
-.dark .surah-card{
-    background:#16352B;
-    border:1px solid #d4af37;
-}
-
-.dark .surah-card h3{
-    color:#F7D27A;   /* ذهبي */
-}
-
-.dark .surah-card span{
-    color:#EDE6C5;   /* أبيض مائل للذهبي */
-}
-
-.dark .surah-number{
-    background:linear-gradient(135deg,#F7D27A,#BD8D2F);
-    color:#003F2D;
-}
-
-.dark .surah-arrow{
-    color:#F7D27A;
-}.app-footer{
-    text-align:center;
-    margin-top:50px;
-    padding:25px 15px;
-    color:#666;
-    border-top:1px solid rgba(0,0,0,.08);
-    font-size:15px;
-}
-
-.app-footer strong{
-    color:#006847;
-}
-
-.app-footer span{
-    display:block;
-    margin-top:8px;
-    font-size:13px;
-    color:#999;
-}
-
-/* الوضع الليلي */
-
-.dark .app-footer{
-    color:#cfcfcf;
-    border-top:1px solid rgba(255,255,255,.1);
-}
-
-.dark .app-footer strong{
-    color:#F7D27A;
-}
-
-.dark .app-footer span{
-    color:#999;
-}.surah-card h3{
-  font-family:'Amiri', Tahoma, Arial, serif;
-  line-height:1.7;
-  letter-spacing:0;
-  white-space:normal;
-}
-.surah-card h3,
-.section-title,
-.search-box input,
-.home-card,
-.app-header,
-button{
-  font-family: Arial, Tahoma, sans-serif !important;
-}
-
-.ayah-container,
-.basmala{
-  font-family: 'Amiri', serif !important;
 }
