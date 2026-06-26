@@ -26,7 +26,7 @@ fetch("https://api.alquran.cloud/v1/quran/quran-uthmani")
     console.error("خطأ في تحميل القرآن:", error);
     surahList.innerHTML = `
       <p style="color:red;text-align:center;">
-        لم يتم تحميل القرآن. تأكدي من اتصال الإنترنت.
+        لم يتم تحميل القرآن. تأكد من اتصال الإنترنت.
       </p>
     `;
   });
