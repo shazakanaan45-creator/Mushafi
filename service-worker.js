@@ -1,4 +1,4 @@
-const CACHE_NAME = "mushafi-v3";
+const CACHE_NAME = "mushafi-v4";
 
 const FILES_TO_CACHE = [
   "./",
