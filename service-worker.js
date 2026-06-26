@@ -1,9 +1,9 @@
-const CACHE_NAME = "mushafi-v1";
+const CACHE_NAME = "mushafi-v2";
 
 const FILES_TO_CACHE = [
   "./",
   "./index.html",
-  "./styles.css",
+  "./style.css",
   "./script.js",
   "./manifest.json",
   "./icon-192.png",
