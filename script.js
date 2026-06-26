@@ -26,7 +26,7 @@ const simpleSurahNames = [
 
 surahList.innerHTML = "<p style='text-align:center;'>جاري تحميل السور...</p>";
 
-fetch("https://api.alquran.cloud/v1/quran/quran-uthmani")
+fetch("https://api.alquran.cloud/v1/quran/quran-simple")
   .then(response => response.json())
   .then(result => {
     quranData = result.data.surahs.map(surah => ({
