@@ -14,7 +14,10 @@ fetch("https://api.alquran.cloud/v1/quran/quran-uthmani")
   .then(result => {
     quranData = result.data.surahs.map(surah => ({
       id: surah.number,
-      name: surah.name.replace("سُورَةُ ", ""),
+      name: surah.name
+  .replace("سُورَةُ ", "")
+  .replace(/[۝۞]/g, "")
+  .trim(),
       type: surah.revelationType === "Meccan" ? "مكية" : "مدنية",
       ayahs: surah.ayahs.map(a => a.text)
     }));
