@@ -9,15 +9,29 @@ const ayahContainer = document.getElementById("ayahContainer");
 const lastRead = document.getElementById("lastRead");
 const searchInput = document.getElementById("searchInput");
 
+const simpleSurahNames = [
+  "الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس",
+  "هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه",
+  "الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم",
+  "لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر",
+  "فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق",
+  "الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة",
+  "الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج",
+  "نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس",
+  "التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد",
+  "الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات",
+  "القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر",
+  "المسد","الإخلاص","الفلق","الناس"
+];
+
+surahList.innerHTML = "<p style='text-align:center;'>جاري تحميل السور...</p>";
+
 fetch("https://api.alquran.cloud/v1/quran/quran-uthmani")
   .then(response => response.json())
   .then(result => {
     quranData = result.data.surahs.map(surah => ({
       id: surah.number,
-      name: surah.name
-  .replace("سُورَةُ ", "")
-  .replace(/[۝۞]/g, "")
-  .trim(),
+      name: simpleSurahNames[surah.number - 1],
       type: surah.revelationType === "Meccan" ? "مكية" : "مدنية",
       ayahs: surah.ayahs.map(a => a.text)
     }));
@@ -41,14 +55,14 @@ function renderSurahs(data) {
     const card = document.createElement("div");
     card.className = "surah-card";
 
-card.innerHTML = `
-  <div class="surah-number">${surah.id}</div>
-  <div>
-    <h3>سورة ${surah.name}</h3>
-    <span>${surah.type} • ${surah.ayahs.length} آية</span>
-  </div>
-  <div class="surah-arrow">‹</div>
-`;
+    card.innerHTML = `
+      <div class="surah-number">${surah.id}</div>
+      <div>
+        <h3>سورة ${surah.name}</h3>
+        <span>${surah.type} • ${surah.ayahs.length} آية</span>
+      </div>
+      <div class="surah-arrow">‹</div>
+    `;
 
     card.onclick = () => openSurahById(surah.id);
     surahList.appendChild(card);
@@ -57,6 +71,7 @@ card.innerHTML = `
 
 function openSurahById(id) {
   const index = quranData.findIndex(surah => surah.id === id);
+
   if (index !== -1) {
     openSurah(index);
   }
@@ -80,16 +95,16 @@ function openSurah(index) {
   }
 
   ayahContainer.innerHTML = "";
-  // عرض البسملة في جميع السور ما عدا التوبة
-if (surah.id !== 9) {
+
+  if (surah.id !== 9) {
     ayahContainer.innerHTML += `
-        <div class="basmala-box">
-            <div class="basmala">
-                ﴿ بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ﴾
-            </div>
+      <div class="basmala-box">
+        <div class="basmala">
+          ﴿ بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ﴾
         </div>
+      </div>
     `;
-}
+  }
 
   surah.ayahs.forEach((ayah, i) => {
     const div = document.createElement("div");
@@ -134,7 +149,6 @@ function searchSurah() {
 
   const filtered = quranData.filter(surah =>
     surah.name.includes(value) ||
-    surah.name.replace(/[ًٌٍَُِّْٰ]/g, "").includes(value) ||
     String(surah.id).includes(value)
   );
 
