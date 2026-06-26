@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>مصحفي</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <header class="app-header">
+    <h1>مصحفي</h1>
+    <p>اقرأ القرآن الكريم بسهولة وراحة</p>
+  </header>
+
+  <main class="container">
+
+    <section class="home-card">
+      <h2>متابعة القراءة</h2>
+      <p id="lastRead">لم يتم حفظ قراءة بعد</p>
+      <button onclick="continueReading()">متابعة</button>
+    </section>
+
+    <div class="search-box">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="ابحث عن اسم السورة..."
+        oninput="searchSurah()"
+      />
+    </div>
+
+    <section>
+      <h2 class="section-title">فهرس السور</h2>
+      <div id="surahList" class="surah-list"></div>
+    </section>
+
+    <section id="readerPage" class="reader-page hidden">
+      <div class="reader-actions">
+        <button onclick="backToHome()">رجوع</button>
+        <button onclick="decreaseFont()">A-</button>
+        <button onclick="increaseFont()">A+</button>
+        <button onclick="toggleDarkMode()">ليلي</button>
+      </div>
+
+      <div class="surah-header">
+
+    <div class="ornament">❈ ❈ ❈</div>
+
+    <div class="surah-header">
+  <div class="ornament">❈ ❈ ❈</div>
+  <h2 id="surahTitle"></h2>
+  <p id="surahInfo"></p>
+  <div class="ornament">❈ ❈ ❈</div>
+</div>
+
+    <p id="surahInfo"></p>
+
+    <div class="ornament">❈ ❈ ❈</div>
+
+</div>
+      <div id="ayahContainer" class="ayah-container"></div>
+    </section>
+
+  </main>
+<footer class="app-footer">
+    <p>Designed & Developed by <strong>Shaza K.</strong></p>
+    <span>Version 1.0.0</span>
+</footer>
+  <script src="script.js"></script>
+</body>
+</html>

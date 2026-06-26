@@ -1,0 +1,360 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  direction:rtl;
+  font-family:Tahoma, Arial, sans-serif;
+  background:radial-gradient(circle at top right,#fff8e8 0,#f6eedc 40%,#efe3c8 100%);
+  color:#082f23;
+}
+
+.app-header{
+  background:linear-gradient(135deg,#003f2d,#006b4a);
+  color:#f7d27a;
+  text-align:center;
+  padding:38px 20px;
+  border-bottom-left-radius:35px;
+  border-bottom-right-radius:35px;
+  box-shadow:0 10px 30px rgba(0,0,0,.18);
+}
+
+.app-header h1{
+  font-size:42px;
+  margin-bottom:10px;
+}
+
+.app-header p{
+  color:#fff7df;
+  font-size:17px;
+}
+
+.container{
+  width:94%;
+  max-width:1100px;
+  margin:auto;
+  padding:22px 0 40px;
+}
+
+.home-card{
+  background:linear-gradient(135deg,#00442f,#006847);
+  color:white;
+  border-radius:26px;
+  padding:28px;
+  margin-bottom:24px;
+  box-shadow:0 12px 35px rgba(0,0,0,.2);
+  border:1px solid rgba(255,215,130,.45);
+}
+
+.home-card h2{
+  color:#f7d27a;
+  margin-bottom:10px;
+  font-size:25px;
+}
+
+.home-card p{
+  margin-bottom:18px;
+  color:#fff7df;
+}
+
+button{
+  background:linear-gradient(135deg,#f4d47e,#bd8d2f);
+  color:#092f23;
+  border:none;
+  border-radius:50px;
+  padding:12px 24px;
+  cursor:pointer;
+  font-size:16px;
+  font-weight:bold;
+  box-shadow:0 5px 14px rgba(0,0,0,.18);
+}
+
+button:hover{
+  transform:translateY(-2px);
+}
+
+.search-box{
+  margin-bottom:24px;
+}
+
+.search-box input{
+  width:100%;
+  padding:16px 22px;
+  border-radius:50px;
+  border:1px solid #e2c879;
+  background:#fffaf0;
+  font-size:17px;
+  outline:none;
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+}
+
+.section-title{
+  margin:20px 0 15px;
+  font-size:26px;
+  color:#00442f;
+}
+
+.surah-list{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:16px;
+}
+
+.surah-card{
+  background:#fffaf0;
+  border:1px solid rgba(199,164,73,.45);
+  border-radius:22px;
+  padding:18px;
+  cursor:pointer;
+  box-shadow:0 8px 22px rgba(0,0,0,.1);
+  transition:.25s;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  text-align:right;
+}
+
+.surah-card:hover{
+  transform:translateY(-4px);
+  background:#fff4d8;
+}
+
+.surah-card h3{
+  color:#00442f;
+  font-size:21px;
+  margin-bottom:6px;
+  font-weight:bold;
+}
+
+.surah-card span{
+  color:#8a6a1f;
+  font-size:14px;
+  background:none;
+  padding:0;
+}
+
+.surah-number{
+  width:42px;
+  height:42px;
+  min-width:42px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#f4d47e,#bd8d2f);
+  color:#00442f;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+  box-shadow:0 4px 12px rgba(0,0,0,.15);
+}
+
+.surah-arrow{
+  margin-right:auto;
+  color:#bd8d2f;
+  font-size:28px;
+  font-weight:bold;
+}
+
+.reader-page{
+  margin-top:20px;
+}
+
+.reader-actions{
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:linear-gradient(135deg,#003f2d,#006847);
+  padding:14px;
+  border-radius:18px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:20px;
+  box-shadow:0 8px 25px rgba(0,0,0,.15);
+}
+
+.surah-header{
+  background:linear-gradient(135deg,#00452f,#006847);
+  border-radius:25px;
+  padding:25px;
+  margin-bottom:25px;
+  text-align:center;
+  box-shadow:0 10px 25px rgba(0,0,0,.15);
+  border:2px solid #d7b55b;
+}
+
+#surahTitle{
+  color:#FFD87A;
+  font-size:42px;
+  margin:10px 0;
+  font-weight:bold;
+  font-family:Tahoma, Arial, sans-serif;
+  text-align:center;
+  text-shadow:0 2px 5px rgba(0,0,0,.4);
+}
+
+#surahInfo{
+  color:#FFF7DD;
+  font-size:18px;
+  margin-top:8px;
+}
+
+.ornament{
+  color:#FFD87A;
+  font-size:24px;
+  letter-spacing:8px;
+}
+
+.ayah-container{
+  background:#fffaf0;
+  border:1px solid rgba(199,164,73,.55);
+  border-radius:28px;
+  padding:32px;
+  font-family:'Amiri', serif;
+  font-size:40px;
+  line-height:2.5;
+  box-shadow:0 10px 32px rgba(0,0,0,.12);
+}
+
+.ayah{
+  text-align:center;
+  margin-bottom:24px;
+  padding-bottom:18px;
+  border-bottom:1px dashed rgba(199,164,73,.35);
+}
+
+.ayahNumber{
+  color:#00442f;
+  background:#f6df9a;
+  border:1px solid #bd8d2f;
+  border-radius:50%;
+  padding:4px 9px;
+  font-size:18px;
+  margin-right:8px;
+}
+
+.basmala-box{
+  background:linear-gradient(135deg,#fffdf6,#f8edd1);
+  border:2px solid #d4af37;
+  border-radius:20px;
+  padding:20px;
+  margin:25px 0 35px;
+  text-align:center;
+  box-shadow:0 8px 20px rgba(0,0,0,.12);
+}
+
+.basmala{
+  font-family:'Amiri', serif;
+  font-size:42px;
+  color:#006847;
+  line-height:2;
+  text-shadow:0 1px 2px rgba(0,0,0,.15);
+}
+
+.hidden{
+  display:none;
+}
+
+.dark{
+  background:linear-gradient(135deg,#061b15,#0b3327);
+  color:white;
+}
+
+.dark .home-card,
+.dark .surah-card,
+.dark .ayah-container{
+  background:#102820;
+  color:white;
+}
+
+.dark .section-title{
+  color:#f7d27a;
+}
+
+.dark input{
+  background:#102820;
+  color:white;
+}
+
+@media(max-width:700px){
+  .app-header h1{
+    font-size:32px;
+  }
+
+  .surah-list{
+    grid-template-columns:1fr;
+  }
+
+  .ayah-container{
+    font-size:27px;
+    padding:22px;
+  }
+
+  .basmala{
+    font-size:31px;
+  }
+
+  .reader-actions{
+    display:grid;
+  }
+
+  button{
+    width:100%;
+  }
+}/* ===== إصلاح ألوان الوضع الليلي ===== */
+
+.dark .surah-card{
+    background:#16352B;
+    border:1px solid #d4af37;
+}
+
+.dark .surah-card h3{
+    color:#F7D27A;   /* ذهبي */
+}
+
+.dark .surah-card span{
+    color:#EDE6C5;   /* أبيض مائل للذهبي */
+}
+
+.dark .surah-number{
+    background:linear-gradient(135deg,#F7D27A,#BD8D2F);
+    color:#003F2D;
+}
+
+.dark .surah-arrow{
+    color:#F7D27A;
+}.app-footer{
+    text-align:center;
+    margin-top:50px;
+    padding:25px 15px;
+    color:#666;
+    border-top:1px solid rgba(0,0,0,.08);
+    font-size:15px;
+}
+
+.app-footer strong{
+    color:#006847;
+}
+
+.app-footer span{
+    display:block;
+    margin-top:8px;
+    font-size:13px;
+    color:#999;
+}
+
+/* الوضع الليلي */
+
+.dark .app-footer{
+    color:#cfcfcf;
+    border-top:1px solid rgba(255,255,255,.1);
+}
+
+.dark .app-footer strong{
+    color:#F7D27A;
+}
+
+.dark .app-footer span{
+    color:#999;
+}
