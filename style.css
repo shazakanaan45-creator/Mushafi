@@ -357,4 +357,9 @@ button:hover{
 
 .dark .app-footer span{
     color:#999;
+}.surah-card h3{
+  font-family:'Amiri', Tahoma, Arial, serif;
+  line-height:1.7;
+  letter-spacing:0;
+  white-space:normal;
 }
