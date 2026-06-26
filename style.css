@@ -363,3 +363,16 @@ button:hover{
   letter-spacing:0;
   white-space:normal;
 }
+.surah-card h3,
+.section-title,
+.search-box input,
+.home-card,
+.app-header,
+button{
+  font-family: Arial, Tahoma, sans-serif !important;
+}
+
+.ayah-container,
+.basmala{
+  font-family: 'Amiri', serif !important;
+}
