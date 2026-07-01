@@ -167,26 +167,33 @@ button:hover{
 
 .reader-page{
   margin-top:20px;
+  scroll-margin-top:120px;
 }
 
 .reader-actions{
-  position:sticky;
-  top:0;
-  z-index:10;
+  position:relative;
+  top:auto;
+  z-index:1;
   background:linear-gradient(135deg,#003f2d,#006847);
   padding:14px;
   border-radius:18px;
   display:flex;
   gap:10px;
   flex-wrap:wrap;
-  margin-bottom:20px;
+  margin-bottom:28px;
   box-shadow:0 8px 25px rgba(0,0,0,.15);
+}
+
+.reader-actions button{
+  flex:1;
+  min-width:90px;
 }
 
 .surah-header{
   background:linear-gradient(135deg,#00452f,#006847);
   border-radius:25px;
   padding:25px;
+  margin-top:18px;
   margin-bottom:25px;
   text-align:center;
   box-shadow:0 10px 25px rgba(0,0,0,.15);
@@ -301,6 +308,10 @@ button:hover{
   color:white;
 }
 
+.dark .reader-actions{
+  background:linear-gradient(135deg,#003f2d,#006847);
+}
+
 .dark .surah-card{
   background:#16352B;
   border:1px solid #d4af37;
@@ -355,6 +366,23 @@ button:hover{
     grid-template-columns:1fr;
   }
 
+  .reader-page{
+    margin-top:10px;
+    padding-top:0;
+  }
+
+  .reader-actions{
+    display:grid;
+    position:relative;
+    top:auto;
+    z-index:1;
+    margin-bottom:30px;
+  }
+
+  .surah-header{
+    margin-top:20px;
+  }
+
   .ayah-container{
     font-size:27px;
     padding:22px;
@@ -362,10 +390,6 @@ button:hover{
 
   .basmala{
     font-size:31px;
-  }
-
-  .reader-actions{
-    display:grid;
   }
 
   button{
