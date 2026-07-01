@@ -125,7 +125,12 @@ function openSurah(index) {
 
   lastRead.innerText = "آخر قراءة: سورة " + surah.name;
 
-  window.scrollTo(0, 0);
+  setTimeout(() => {
+    readerPage.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }, 100);
 }
 
 function backToHome() {
@@ -136,7 +141,10 @@ function backToHome() {
   document.querySelector(".section-title").classList.remove("hidden");
   surahList.classList.remove("hidden");
 
-  window.scrollTo(0, 0);
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 }
 
 function searchSurah() {
