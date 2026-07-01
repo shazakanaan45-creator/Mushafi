@@ -38,14 +38,24 @@
     </section>
 
     <section id="readerPage" class="reader-page hidden">
-      <div class="reader-actions">
-        <button onclick="backToHome()">↩<span>رجوع</span></button>
-       <button onclick="decreaseFont()">A−<span>تصغير</span></button>
-       <button onclick="increaseFont()">A+<span>تكبير</span></button>
-       <button onclick="toggleDarkMode()">🌙<span>ليلي</span></button>
-      </div>
 
-      <div class="surah-header">
+  <div class="surah-header">
+    <div class="ornament">❈ ❈ ❈</div>
+    <h2 id="surahTitle"></h2>
+    <p id="surahInfo"></p>
+    <div class="ornament">❈ ❈ ❈</div>
+  </div>
+
+  <div id="ayahContainer" class="ayah-container"></div>
+
+  <div class="reader-actions">
+    <button onclick="backToHome()">↩<span>رجوع</span></button>
+    <button onclick="decreaseFont()">A−<span>تصغير</span></button>
+    <button onclick="increaseFont()">A+<span>تكبير</span></button>
+    <button onclick="toggleDarkMode()">🌙<span>ليلي</span></button>
+  </div>
+
+</section>
 
     <div class="ornament">❈ ❈ ❈</div>
 
