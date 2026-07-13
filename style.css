@@ -1,4 +1,10 @@
-*{
+@font-face {
+  font-family: "MushafiQuran";
+  src: url("./fonts/AmiriQuran.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}*{
   margin:0;
   padding:0;
   box-sizing:border-box;
