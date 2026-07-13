@@ -306,6 +306,9 @@ currentAudioAyahIndex =
   ayahIndex !== null
     ? ayahIndex
     : 0;
+  if (ayahIndex === null) {
+  localStorage.removeItem("lastAyahIndex");
+}
 
 const reciterSelect =
   document.getElementById(
