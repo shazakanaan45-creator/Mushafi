@@ -34,18 +34,40 @@ const simpleSurahNames = [
   "الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"
 ];
 
+const BASMALA_PATTERNS = [
+  "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
+  "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ",
+  "بسم الله الرحمن الرحيم"
+];
+
 surahList.innerHTML =
   "<p style='text-align:center;'>جاري تحميل السور...</p>";
 
 fetch("https://api.alquran.cloud/v1/quran/quran-simple")
-  .then(response => response.json())
+  .then(response => {
+
+    if (!response.ok) {
+      throw new Error("فشل تحميل القرآن");
+    }
+
+    return response.json();
+
+  })
   .then(result => {
 
     quranData = result.data.surahs.map(surah => ({
+
       id: surah.number,
+
       name: simpleSurahNames[surah.number - 1],
-      type: surah.revelationType === "Meccan" ? "مكية" : "مدنية",
+
+      type:
+        surah.revelationType === "Meccan"
+          ? "مكية"
+          : "مدنية",
+
       ayahs: surah.ayahs.map(a => a.text)
+
     }));
 
     renderSurahs(quranData);
@@ -59,11 +81,15 @@ fetch("https://api.alquran.cloud/v1/quran/quran-simple")
   })
   .catch(error => {
 
-    console.error("خطأ في تحميل القرآن:", error);
+    console.error(
+      "خطأ في تحميل القرآن:",
+      error
+    );
 
     surahList.innerHTML = `
       <p style="color:red;text-align:center;">
-        لم يتم تحميل القرآن. تأكد من اتصال الإنترنت.
+        لم يتم تحميل القرآن.
+        تأكد من اتصال الإنترنت.
       </p>
     `;
 
@@ -83,28 +109,43 @@ function renderSurahs(data) {
     `;
 
     return;
+
   }
 
   data.forEach(surah => {
 
-    const card = document.createElement("div");
+    const card =
+      document.createElement("div");
 
     card.className = "surah-card";
 
     card.innerHTML = `
-      <div class="surah-number">${surah.id}</div>
-
-      <div>
-        <h3>سورة ${surah.name}</h3>
-        <span>
-          ${surah.type} • ${surah.ayahs.length} آية
-        </span>
+      <div class="surah-number">
+        ${surah.id}
       </div>
 
-      <div class="surah-arrow">‹</div>
+      <div>
+
+        <h3>
+          سورة ${surah.name}
+        </h3>
+
+        <span>
+          ${surah.type}
+          •
+          ${surah.ayahs.length}
+          آية
+        </span>
+
+      </div>
+
+      <div class="surah-arrow">
+        ‹
+      </div>
     `;
 
-    card.onclick = () => openSurahById(surah.id);
+    card.onclick = () =>
+      openSurahById(surah.id);
 
     surahList.appendChild(card);
 
@@ -115,22 +156,27 @@ function renderSurahs(data) {
 
 function applySurahFilters() {
 
-  const value = searchInput.value.trim();
+  const value =
+    searchInput.value.trim();
 
-  const filtered = quranData.filter(surah => {
+  const filtered =
+    quranData.filter(surah => {
 
-    const matchesSearch =
-      value === "" ||
-      surah.name.includes(value) ||
-      String(surah.id).includes(value);
+      const matchesSearch =
+        value === "" ||
+        surah.name.includes(value) ||
+        String(surah.id).includes(value);
 
-    const matchesType =
-      currentFilter === "all" ||
-      surah.type === currentFilter;
+      const matchesType =
+        currentFilter === "all" ||
+        surah.type === currentFilter;
 
-    return matchesSearch && matchesType;
+      return (
+        matchesSearch &&
+        matchesType
+      );
 
-  });
+    });
 
   renderSurahs(filtered);
 
@@ -141,12 +187,18 @@ function filterSurahs(type, button) {
 
   currentFilter = type;
 
-  document.querySelectorAll(".filter-btn").forEach(btn => {
-    btn.classList.remove("active");
-  });
+  document
+    .querySelectorAll(".filter-btn")
+    .forEach(btn => {
+
+      btn.classList.remove("active");
+
+    });
 
   if (button) {
+
     button.classList.add("active");
+
   }
 
   applySurahFilters();
@@ -155,43 +207,104 @@ function filterSurahs(type, button) {
 
 
 function searchSurah() {
+
   applySurahFilters();
+
 }
 
 
-function openSurahById(id, ayahIndex = null) {
+function openSurahById(
+  id,
+  ayahIndex = null
+) {
 
-  const index = quranData.findIndex(
-    surah => surah.id === id
-  );
+  const index =
+    quranData.findIndex(
+      surah => surah.id === id
+    );
 
   if (index !== -1) {
-    openSurah(index, ayahIndex);
+
+    openSurah(
+      index,
+      ayahIndex
+    );
+
   }
 
 }
 
 
-function openSurah(index, ayahIndex = null) {
+function normalizeAyahText(
+  text,
+  surahId,
+  ayahIndex
+) {
+
+  if (
+    surahId === 1 ||
+    surahId === 9 ||
+    ayahIndex !== 0
+  ) {
+
+    return text;
+
+  }
+
+  let cleanText = text.trim();
+
+  BASMALA_PATTERNS.forEach(pattern => {
+
+    if (
+      cleanText.startsWith(pattern)
+    ) {
+
+      cleanText =
+        cleanText
+          .slice(pattern.length)
+          .trim();
+
+    }
+
+  });
+
+  return cleanText;
+
+}
+
+
+function openSurah(
+  index,
+  ayahIndex = null
+) {
 
   currentSurahIndex = index;
   currentAyahIndex = ayahIndex;
 
-  const surah = quranData[index];
+  const surah =
+    quranData[index];
 
   document
     .querySelectorAll(".page-section")
-    .forEach(page => page.classList.add("hidden"));
+    .forEach(page => {
+
+      page.classList.add("hidden");
+
+    });
 
   readerPage.classList.remove("hidden");
 
   bottomNav.classList.add("hidden");
 
   surahTitle.innerHTML =
-    "﴿ سورة " + surah.name + " ﴾";
+    "﴿ سورة " +
+    surah.name +
+    " ﴾";
 
   const surahInfo =
-    document.getElementById("surahInfo");
+    document.getElementById(
+      "surahInfo"
+    );
 
   if (surahInfo) {
 
@@ -205,39 +318,109 @@ function openSurah(index, ayahIndex = null) {
 
   ayahContainer.innerHTML = "";
 
-  if (surah.id !== 9) {
+  if (
+    surah.id !== 1 &&
+    surah.id !== 9
+  ) {
 
-    ayahContainer.innerHTML += `
-      <div class="basmala-box">
-        <div class="basmala">
-          ﴿ بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ﴾
-        </div>
+    const basmalaBox =
+      document.createElement("div");
+
+    basmalaBox.className =
+      "basmala-box";
+
+    basmalaBox.innerHTML = `
+      <div class="basmala">
+        ﴿ بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ﴾
       </div>
     `;
 
+    ayahContainer.appendChild(
+      basmalaBox
+    );
+
   }
 
-  surah.ayahs.forEach((ayah, i) => {
+  const quranText =
+    document.createElement("div");
 
-    const div = document.createElement("div");
+  quranText.className = "quran-text";
 
-    div.className = "ayah";
+  surah.ayahs.forEach(
+    (originalAyah, i) => {
 
-    div.dataset.ayahIndex = i;
+      const ayah =
+        normalizeAyahText(
+          originalAyah,
+          surah.id,
+          i
+        );
 
-    div.innerHTML = `
-      ${ayah}
-      <span class="ayahNumber">
-        ﴿${i + 1}﴾
-      </span>
-    `;
+      if (!ayah) {
 
-    div.onclick = () =>
-      openAyahActions(index, i);
+        return;
 
-    ayahContainer.appendChild(div);
+      }
 
-  });
+      const ayahSpan =
+        document.createElement("span");
+
+      ayahSpan.className = "ayah";
+
+      ayahSpan.dataset.ayahIndex = i;
+
+      const ayahText =
+        document.createElement("span");
+
+      ayahText.className =
+        "ayah-text";
+
+      ayahText.textContent = ayah;
+
+      const ayahNumber =
+        document.createElement("span");
+
+      ayahNumber.className =
+        "ayahNumber";
+
+      ayahNumber.textContent =
+        i + 1;
+
+      ayahSpan.appendChild(
+        ayahText
+      );
+
+      ayahSpan.appendChild(
+        document.createTextNode(" ")
+      );
+
+      ayahSpan.appendChild(
+        ayahNumber
+      );
+
+      ayahSpan.onclick = () => {
+
+        openAyahActions(
+          index,
+          i
+        );
+
+      };
+
+      quranText.appendChild(
+        ayahSpan
+      );
+
+      quranText.appendChild(
+        document.createTextNode(" ")
+      );
+
+    }
+  );
+
+  ayahContainer.appendChild(
+    quranText
+  );
 
   ayahContainer.style.fontSize =
     currentFontSize + "px";
@@ -262,7 +445,8 @@ function openSurah(index, ayahIndex = null) {
   }
 
   lastRead.innerText =
-    "آخر قراءة: سورة " + surah.name;
+    "آخر قراءة: سورة " +
+    surah.name;
 
   registerReadingDay();
 
@@ -278,8 +462,11 @@ function openSurah(index, ayahIndex = null) {
       if (target) {
 
         target.scrollIntoView({
-          behavior: "smooth",
-          block: "center"
+
+          behavior:"smooth",
+
+          block:"center"
+
         });
 
       }
@@ -287,13 +474,16 @@ function openSurah(index, ayahIndex = null) {
     } else {
 
       readerPage.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
+
+        behavior:"smooth",
+
+        block:"start"
+
       });
 
     }
 
-  }, 100);
+  },100);
 
 }
 
@@ -305,16 +495,14 @@ function backToHome() {
   bottomNav.classList.remove("hidden");
 
   showPage(
+
     "homePage",
+
     document.querySelector(
       '[data-page="homePage"]'
     )
-  );
 
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
+  );
 
 }
 
@@ -322,10 +510,14 @@ function backToHome() {
 function continueReading() {
 
   const savedIndex =
-    localStorage.getItem("lastSurahIndex");
+    localStorage.getItem(
+      "lastSurahIndex"
+    );
 
   const savedAyah =
-    localStorage.getItem("lastAyahIndex");
+    localStorage.getItem(
+      "lastAyahIndex"
+    );
 
   if (
     savedIndex !== null &&
@@ -333,10 +525,13 @@ function continueReading() {
   ) {
 
     openSurah(
+
       Number(savedIndex),
+
       savedAyah !== null
         ? Number(savedAyah)
         : null
+
     );
 
   } else {
@@ -353,10 +548,14 @@ function continueReading() {
 function loadLastRead() {
 
   const savedName =
-    localStorage.getItem("lastSurahName");
+    localStorage.getItem(
+      "lastSurahName"
+    );
 
   const savedAyah =
-    localStorage.getItem("lastAyahIndex");
+    localStorage.getItem(
+      "lastAyahIndex"
+    );
 
   if (savedName) {
 
@@ -366,7 +565,9 @@ function loadLastRead() {
       (
         savedAyah !== null
           ? " • الآية " +
-            (Number(savedAyah) + 1)
+            (
+              Number(savedAyah) + 1
+            )
           : ""
       );
 
@@ -381,6 +582,12 @@ function loadLastRead() {
 
 
 function increaseFont() {
+
+  if (currentFontSize >= 52) {
+
+    return;
+
+  }
 
   currentFontSize += 2;
 
@@ -416,17 +623,27 @@ function decreaseFont() {
 
 function toggleDarkMode() {
 
-  document.body.classList.toggle("dark");
+  document.body.classList.toggle(
+    "dark"
+  );
 
   localStorage.setItem(
+
     "darkMode",
-    document.body.classList.contains("dark")
+
+    document.body.classList.contains(
+      "dark"
+    )
+
   );
 
 }
 
 
-function showPage(pageId, button) {
+function showPage(
+  pageId,
+  button
+) {
 
   readerPage.classList.add("hidden");
 
@@ -453,20 +670,33 @@ function showPage(pageId, button) {
     });
 
   if (button) {
+
     button.classList.add("active");
+
   }
 
-  if (pageId === "bookmarksPage") {
+  if (
+    pageId === "bookmarksPage"
+  ) {
+
     renderBookmarks();
+
   }
 
-  if (pageId === "tasbihPage") {
+  if (
+    pageId === "tasbihPage"
+  ) {
+
     loadTasbih();
+
   }
 
   window.scrollTo({
-    top: 0,
-    behavior: "smooth"
+
+    top:0,
+
+    behavior:"smooth"
+
   });
 
 }
@@ -480,17 +710,28 @@ function openAyahActions(
   const surah =
     quranData[surahIndex];
 
+  const cleanText =
+    normalizeAyahText(
+
+      surah.ayahs[ayahIndex],
+
+      surah.id,
+
+      ayahIndex
+
+    );
+
   selectedAyah = {
 
-    surahId: surah.id,
+    surahId:surah.id,
 
-    surahName: surah.name,
+    surahName:surah.name,
 
-    ayahIndex: ayahIndex,
+    ayahIndex:ayahIndex,
 
-    ayahNumber: ayahIndex + 1,
+    ayahNumber:ayahIndex + 1,
 
-    text: surah.ayahs[ayahIndex]
+    text:cleanText
 
   };
 
@@ -516,17 +757,23 @@ function openAyahActions(
   incrementDailyProgress();
 
   document
-    .getElementById("selectedAyahTitle")
+    .getElementById(
+      "selectedAyahTitle"
+    )
     .innerText =
       `سورة ${surah.name} • الآية ${ayahIndex + 1}`;
 
   document
-    .getElementById("selectedAyahPreview")
+    .getElementById(
+      "selectedAyahPreview"
+    )
     .innerText =
       selectedAyah.text;
 
   document
-    .getElementById("ayahActionSheet")
+    .getElementById(
+      "ayahActionSheet"
+    )
     .classList.remove("hidden");
 
 }
@@ -537,10 +784,16 @@ function closeAyahActions(event) {
   if (
     event &&
     event.target !== event.currentTarget
-  ) return;
+  ) {
+
+    return;
+
+  }
 
   document
-    .getElementById("ayahActionSheet")
+    .getElementById(
+      "ayahActionSheet"
+    )
     .classList.add("hidden");
 
 }
@@ -548,18 +801,25 @@ function closeAyahActions(event) {
 
 function saveSelectedAyah() {
 
-  if (!selectedAyah) return;
+  if (!selectedAyah) {
 
-  const bookmarks = getBookmarks();
+    return;
 
-  const exists = bookmarks.some(item =>
+  }
 
-    item.surahId === selectedAyah.surahId &&
+  const bookmarks =
+    getBookmarks();
 
-    item.ayahNumber ===
-      selectedAyah.ayahNumber
+  const exists =
+    bookmarks.some(item =>
 
-  );
+      item.surahId ===
+        selectedAyah.surahId &&
+
+      item.ayahNumber ===
+        selectedAyah.ayahNumber
+
+    );
 
   if (exists) {
 
@@ -571,14 +831,21 @@ function saveSelectedAyah() {
 
   }
 
-  bookmarks.unshift(selectedAyah);
-
-  localStorage.setItem(
-    "bookmarks",
-    JSON.stringify(bookmarks)
+  bookmarks.unshift(
+    selectedAyah
   );
 
-  showToast("تم حفظ الآية");
+  localStorage.setItem(
+
+    "bookmarks",
+
+    JSON.stringify(bookmarks)
+
+  );
+
+  showToast(
+    "تم حفظ الآية"
+  );
 
   closeAyahActions();
 
@@ -587,21 +854,33 @@ function saveSelectedAyah() {
 
 function copySelectedAyah() {
 
-  if (!selectedAyah) return;
+  if (!selectedAyah) {
+
+    return;
+
+  }
 
   copyText(
-    formatAyahText(selectedAyah)
+
+    formatAyahText(
+      selectedAyah
+    )
+
   )
     .then(() => {
 
-      showToast("تم نسخ الآية");
+      showToast(
+        "تم نسخ الآية"
+      );
 
       closeAyahActions();
 
     })
     .catch(() => {
 
-      showToast("تعذر النسخ");
+      showToast(
+        "تعذر النسخ"
+      );
 
     });
 
@@ -610,10 +889,18 @@ function copySelectedAyah() {
 
 function shareSelectedAyah() {
 
-  if (!selectedAyah) return;
+  if (!selectedAyah) {
+
+    return;
+
+  }
 
   shareText(
-    formatAyahText(selectedAyah)
+
+    formatAyahText(
+      selectedAyah
+    )
+
   );
 
   closeAyahActions();
@@ -626,7 +913,11 @@ function getBookmarks() {
   try {
 
     return JSON.parse(
-      localStorage.getItem("bookmarks")
+
+      localStorage.getItem(
+        "bookmarks"
+      )
+
     ) || [];
 
   } catch {
@@ -645,9 +936,14 @@ function renderBookmarks() {
       "bookmarksList"
     );
 
-  if (!container) return;
+  if (!container) {
 
-  const bookmarks = getBookmarks();
+    return;
+
+  }
+
+  const bookmarks =
+    getBookmarks();
 
   container.innerHTML = "";
 
@@ -661,7 +957,7 @@ function renderBookmarks() {
         <br>
 
         اضغطي على أي آية داخل القارئ
-        ثم اختاري "حفظ".
+        ثم اختاري حفظ.
 
       </div>
     `;
@@ -670,69 +966,91 @@ function renderBookmarks() {
 
   }
 
-  bookmarks.forEach((item, index) => {
+  bookmarks.forEach(
+    (item,index) => {
 
-    const card =
-      document.createElement("article");
+      const card =
+        document.createElement(
+          "article"
+        );
 
-    card.className = "bookmark-card";
+      card.className =
+        "bookmark-card";
 
-    card.innerHTML = `
-      <p>
+      card.innerHTML = `
+        <p>
 
-        ${item.text}
+          ${item.text}
 
-        <span class="ayahNumber">
-          ﴿${item.ayahNumber}﴾
-        </span>
+          <span class="ayahNumber">
+            ${item.ayahNumber}
+          </span>
 
-      </p>
+        </p>
 
-      <div class="bookmark-meta">
+        <div class="bookmark-meta">
 
-        <span>
-          سورة ${item.surahName}
-        </span>
+          <span>
+            سورة ${item.surahName}
+          </span>
 
-        <button
-          onclick="removeBookmark(${index})"
-        >
-          حذف
-        </button>
+          <button
+            onclick="removeBookmark(${index})"
+          >
+            حذف
+          </button>
 
-      </div>
-    `;
+        </div>
+      `;
 
-    card.onclick = event => {
+      card.onclick = event => {
 
-      if (
-        event.target.tagName
-          .toLowerCase() === "button"
-      ) return;
+        if (
+          event.target.tagName
+            .toLowerCase() ===
+          "button"
+        ) {
 
-      openSurahById(
-        item.surahId,
-        item.ayahIndex
+          return;
+
+        }
+
+        openSurahById(
+
+          item.surahId,
+
+          item.ayahIndex
+
+        );
+
+      };
+
+      container.appendChild(
+        card
       );
 
-    };
-
-    container.appendChild(card);
-
-  });
+    }
+  );
 
 }
 
 
 function removeBookmark(index) {
 
-  const bookmarks = getBookmarks();
+  const bookmarks =
+    getBookmarks();
 
-  bookmarks.splice(index, 1);
+  bookmarks.splice(
+    index,
+    1
+  );
 
   localStorage.setItem(
+
     "bookmarks",
+
     JSON.stringify(bookmarks)
+
   );
 
   renderBookmarks();
@@ -749,13 +1067,21 @@ function getTodayKey() {
   const now = new Date();
 
   return (
+
     now.getFullYear() +
+
     "-" +
-    String(now.getMonth() + 1)
-      .padStart(2, "0") +
+
+    String(
+      now.getMonth() + 1
+    ).padStart(2,"0") +
+
     "-" +
-    String(now.getDate())
-      .padStart(2, "0")
+
+    String(
+      now.getDate()
+    ).padStart(2,"0")
+
   );
 
 }
@@ -764,9 +1090,15 @@ function getTodayKey() {
 function getDailyGoal() {
 
   return (
+
     Number(
-      localStorage.getItem("dailyGoal")
+
+      localStorage.getItem(
+        "dailyGoal"
+      )
+
     ) || 10
+
   );
 
 }
@@ -775,7 +1107,9 @@ function getDailyGoal() {
 function openDailyGoalModal() {
 
   document
-    .getElementById("dailyGoalModal")
+    .getElementById(
+      "dailyGoalModal"
+    )
     .classList.remove("hidden");
 
 }
@@ -786,10 +1120,16 @@ function closeDailyGoalModal(event) {
   if (
     event &&
     event.target !== event.currentTarget
-  ) return;
+  ) {
+
+    return;
+
+  }
 
   document
-    .getElementById("dailyGoalModal")
+    .getElementById(
+      "dailyGoalModal"
+    )
     .classList.add("hidden");
 
 }
@@ -818,9 +1158,11 @@ function getDailyProgressData() {
   try {
 
     return JSON.parse(
+
       localStorage.getItem(
         "dailyProgress"
       )
+
     ) || {};
 
   } catch {
@@ -834,7 +1176,8 @@ function getDailyProgressData() {
 
 function incrementDailyProgress() {
 
-  const today = getTodayKey();
+  const today =
+    getTodayKey();
 
   const data =
     getDailyProgressData();
@@ -850,13 +1193,18 @@ function incrementDailyProgress() {
     const key =
       `${selectedAyah.surahId}:${selectedAyah.ayahNumber}`;
 
-    if (!data[today].includes(key)) {
+    if (
+      !data[today].includes(key)
+    ) {
 
       data[today].push(key);
 
       localStorage.setItem(
+
         "dailyProgress",
+
         JSON.stringify(data)
+
       );
 
       updateDailyProgress();
@@ -870,9 +1218,11 @@ function incrementDailyProgress() {
 
 function updateDailyProgress() {
 
-  const goal = getDailyGoal();
+  const goal =
+    getDailyGoal();
 
-  const today = getTodayKey();
+  const today =
+    getTodayKey();
 
   const data =
     getDailyProgressData();
@@ -884,30 +1234,42 @@ function updateDailyProgress() {
 
   const percent =
     Math.min(
+
       100,
+
       Math.round(
         (count / goal) * 100
       )
+
     );
 
   document
-    .getElementById("dailyGoalTitle")
+    .getElementById(
+      "dailyGoalTitle"
+    )
     .innerText =
       `${goal} آيات يومياً`;
 
   document
-    .getElementById("dailyProgressText")
+    .getElementById(
+      "dailyProgressText"
+    )
     .innerText =
       `${count} / ${goal}`;
 
   document
-    .getElementById("dailyProgressBar")
+    .getElementById(
+      "dailyProgressBar"
+    )
     .style.width =
       percent + "%";
 
   document
-    .getElementById("dailyGoalText")
+    .getElementById(
+      "dailyGoalText"
+    )
     .innerText =
+
       count >= goal
 
         ? "ما شاء الله، أتممتِ ورد اليوم ✨"
@@ -958,52 +1320,77 @@ function startDailyWird() {
 
 function loadDailyVerse() {
 
-  if (!quranData.length) return;
+  if (!quranData.length) {
 
-  const today = getTodayKey();
+    return;
+
+  }
+
+  const today =
+    getTodayKey();
 
   const numericSeed =
     [...today].reduce(
-      (sum, char) =>
+
+      (sum,char) =>
         sum + char.charCodeAt(0),
+
       0
+
     );
 
   const surahIndex =
-    numericSeed % quranData.length;
+    numericSeed %
+    quranData.length;
 
   const surah =
     quranData[surahIndex];
 
   const ayahIndex =
-    numericSeed % surah.ayahs.length;
+    numericSeed %
+    surah.ayahs.length;
 
   const dailyVerse = {
 
-    surahId: surah.id,
+    surahId:surah.id,
 
-    surahName: surah.name,
+    surahName:surah.name,
 
-    ayahNumber: ayahIndex + 1,
+    ayahNumber:ayahIndex + 1,
 
-    ayahIndex: ayahIndex,
+    ayahIndex:ayahIndex,
 
-    text: surah.ayahs[ayahIndex]
+    text:normalizeAyahText(
+
+      surah.ayahs[ayahIndex],
+
+      surah.id,
+
+      ayahIndex
+
+    )
 
   };
 
   localStorage.setItem(
+
     "dailyVerse",
+
     JSON.stringify(dailyVerse)
+
   );
 
   document
-    .getElementById("dailyVerseText")
+    .getElementById(
+      "dailyVerseText"
+    )
     .innerText =
       dailyVerse.text;
 
   document
-    .getElementById("dailyVerseSource")
+    .getElementById(
+      "dailyVerseSource"
+    )
     .innerText =
       `سورة ${dailyVerse.surahName} • الآية ${dailyVerse.ayahNumber}`;
 
@@ -1015,9 +1402,11 @@ function getDailyVerse() {
   try {
 
     return JSON.parse(
+
       localStorage.getItem(
         "dailyVerse"
       )
+
     );
 
   } catch {
@@ -1031,35 +1420,53 @@ function getDailyVerse() {
 
 function copyDailyVerse() {
 
-  const verse = getDailyVerse();
+  const verse =
+    getDailyVerse();
 
-  if (!verse) return;
+  if (!verse) {
+
+    return;
+
+  }
 
   copyText(
+
     formatAyahText(verse)
+
   )
-    .then(() =>
+    .then(() => {
+
       showToast(
         "تم نسخ آية اليوم"
-      )
-    )
-    .catch(() =>
+      );
+
+    })
+    .catch(() => {
+
       showToast(
         "تعذر النسخ"
-      )
-    );
+      );
+
+    });
 
 }
 
 
 function shareDailyVerse() {
 
-  const verse = getDailyVerse();
+  const verse =
+    getDailyVerse();
 
-  if (!verse) return;
+  if (!verse) {
+
+    return;
+
+  }
 
   shareText(
+
     formatAyahText(verse)
+
   );
 
 }
@@ -1068,11 +1475,17 @@ function shareDailyVerse() {
 function formatAyahText(item) {
 
   return (
+
     item.text +
+
     " ﴿" +
+
     item.ayahNumber +
+
     "﴾\nسورة " +
+
     item.surahName
+
   );
 
 }
@@ -1091,7 +1504,7 @@ function copyText(text) {
   }
 
   return new Promise(
-    (resolve, reject) => {
+    (resolve,reject) => {
 
       const textarea =
         document.createElement(
@@ -1100,14 +1513,17 @@ function copyText(text) {
 
       textarea.value = text;
 
-      document.body
-        .appendChild(textarea);
+      document.body.appendChild(
+        textarea
+      );
 
       textarea.select();
 
       try {
 
-        document.execCommand("copy");
+        document.execCommand(
+          "copy"
+        );
 
         resolve();
 
@@ -1133,9 +1549,9 @@ function shareText(text) {
 
     navigator.share({
 
-      title: "مصحفي",
+      title:"مصحفي",
 
-      text: text
+      text:text
 
     }).catch(() => {});
 
@@ -1143,21 +1559,21 @@ function shareText(text) {
 
     copyText(text)
 
-      .then(() =>
+      .then(() => {
 
         showToast(
           "تم نسخ الآية للمشاركة"
-        )
+        );
 
-      )
+      })
 
-      .catch(() =>
+      .catch(() => {
 
         showToast(
           "تعذر المشاركة"
-        )
+        );
 
-      );
+      });
 
   }
 
@@ -1166,16 +1582,19 @@ function shareText(text) {
 
 function registerReadingDay() {
 
-  const today = getTodayKey();
+  const today =
+    getTodayKey();
 
   let days = [];
 
   try {
 
     days = JSON.parse(
+
       localStorage.getItem(
         "readingDays"
       )
+
     ) || [];
 
   } catch {
@@ -1184,13 +1603,18 @@ function registerReadingDay() {
 
   }
 
-  if (!days.includes(today)) {
+  if (
+    !days.includes(today)
+  ) {
 
     days.push(today);
 
     localStorage.setItem(
+
       "readingDays",
+
       JSON.stringify(days)
+
     );
 
   }
@@ -1207,9 +1631,11 @@ function updateStreakUI() {
   try {
 
     days = JSON.parse(
+
       localStorage.getItem(
         "readingDays"
       )
+
     ) || [];
 
   } catch {
@@ -1218,26 +1644,35 @@ function updateStreakUI() {
 
   }
 
-  const daySet = new Set(days);
+  const daySet =
+    new Set(days);
 
   let streak = 0;
 
-  let date = new Date();
+  let date =
+    new Date();
 
   while (true) {
 
     const key =
+
       date.getFullYear() +
+
       "-" +
+
       String(
         date.getMonth() + 1
-      ).padStart(2, "0") +
+      ).padStart(2,"0") +
+
       "-" +
+
       String(
         date.getDate()
-      ).padStart(2, "0");
+      ).padStart(2,"0");
 
-    if (daySet.has(key)) {
+    if (
+      daySet.has(key)
+    ) {
 
       streak++;
 
@@ -1254,7 +1689,9 @@ function updateStreakUI() {
   }
 
   document
-    .getElementById("streakDays")
+    .getElementById(
+      "streakDays"
+    )
     .innerText =
       streak;
 
@@ -1266,16 +1703,18 @@ function getTasbihState() {
   try {
 
     return JSON.parse(
+
       localStorage.getItem(
         "tasbihState"
       )
+
     ) || {
 
-      phrase: "سبحان الله",
+      phrase:"سبحان الله",
 
-      count: 0,
+      count:0,
 
-      target: 33
+      target:33
 
     };
 
@@ -1283,11 +1722,11 @@ function getTasbihState() {
 
     return {
 
-      phrase: "سبحان الله",
+      phrase:"سبحان الله",
 
-      count: 0,
+      count:0,
 
-      target: 33
+      target:33
 
     };
 
@@ -1299,8 +1738,11 @@ function getTasbihState() {
 function saveTasbihState(state) {
 
   localStorage.setItem(
+
     "tasbihState",
+
     JSON.stringify(state)
+
   );
 
 }
@@ -1312,27 +1754,40 @@ function loadTasbih() {
     getTasbihState();
 
   document
-    .getElementById("tasbihPhrase")
+    .getElementById(
+      "tasbihPhrase"
+    )
     .value =
       state.phrase;
 
   document
-    .getElementById("tasbihCount")
+    .getElementById(
+      "tasbihCount"
+    )
     .innerText =
       state.count;
 
   document
-    .getElementById("tasbihTargetText")
+    .getElementById(
+      "tasbihTargetText"
+    )
     .innerText =
       `${state.count} / ${state.target}`;
 
   const percent =
     Math.min(
+
       100,
+
       Math.round(
-        (state.count / state.target)
-        * 100
+
+        (
+          state.count /
+          state.target
+        ) * 100
+
       )
+
     );
 
   document
@@ -1352,21 +1807,26 @@ function incrementTasbih() {
 
   state.count += 1;
 
-  if (navigator.vibrate) {
+  if (
+    navigator.vibrate
+  ) {
 
     navigator.vibrate(20);
 
   }
 
   if (
-    state.count === state.target
+    state.count ===
+    state.target
   ) {
 
     showToast(
       "ما شاء الله، تم إكمال الهدف ✨"
     );
 
-    if (navigator.vibrate) {
+    if (
+      navigator.vibrate
+    ) {
 
       navigator.vibrate([
         80,
@@ -1411,14 +1871,25 @@ function changeTasbihTarget() {
   const current =
     getTasbihState();
 
-  const value = prompt(
-    "أدخلي هدف التسبيح",
-    current.target
-  );
+  const value =
+    prompt(
 
-  if (value === null) return;
+      "أدخلي هدف التسبيح",
 
-  const target = Number(value);
+      current.target
+
+    );
+
+  if (
+    value === null
+  ) {
+
+    return;
+
+  }
+
+  const target =
+    Number(value);
 
   if (
     !Number.isInteger(target) ||
@@ -1434,9 +1905,12 @@ function changeTasbihTarget() {
 
   }
 
-  current.target = target;
+  current.target =
+    target;
 
-  saveTasbihState(current);
+  saveTasbihState(
+    current
+  );
 
   loadTasbih();
 
@@ -1467,19 +1941,29 @@ let toastTimer;
 function showToast(message) {
 
   const toast =
-    document.getElementById("toast");
+    document.getElementById(
+      "toast"
+    );
 
-  toast.innerText = message;
+  toast.innerText =
+    message;
 
-  toast.classList.add("show");
+  toast.classList.add(
+    "show"
+  );
 
-  clearTimeout(toastTimer);
+  clearTimeout(
+    toastTimer
+  );
 
-  toastTimer = setTimeout(() => {
+  toastTimer =
+    setTimeout(() => {
 
-    toast.classList.remove("show");
+      toast.classList.remove(
+        "show"
+      );
 
-  }, 2200);
+    },2200);
 
 }
 
@@ -1498,10 +1982,14 @@ window.addEventListener(
         "fontSize"
       );
 
-    if (savedDark === "true") {
+    if (
+      savedDark === "true"
+    ) {
 
       document.body
-        .classList.add("dark");
+        .classList.add(
+          "dark"
+        );
 
     }
 
