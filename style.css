@@ -194,7 +194,7 @@ button:hover{
 .daily-verse{
   font-size:20px;
   color:#00442f !important;
-  font-family:'Amiri', serif;
+  font-family:"MushafiQuran", serif !important;
 }
 
 .verse-source{
@@ -413,7 +413,7 @@ button:hover{
   border:1px solid rgba(199,164,73,.55);
   border-radius:28px;
   padding:38px;
-  font-family:'Amiri', serif;
+  font-family:"MushafiQuran", serif !important;
   font-size:40px;
   line-height:2.2;
   box-shadow:0 10px 32px rgba(0,0,0,.12);
@@ -477,7 +477,7 @@ button:hover{
 }
 
 .basmala{
-  font-family:'Amiri', serif;
+  font-family:"MushafiQuran", serif !important;
   font-size:42px;
   color:#006847;
   line-height:2;
@@ -537,7 +537,7 @@ button:hover{
 }
 
 .bookmark-card p{
-  font-family:'Amiri', serif;
+  font-family:"MushafiQuran", serif !important;
   color:#00442f;
   font-size:25px;
   line-height:2;
@@ -672,7 +672,7 @@ button:hover{
 }
 
 .selected-ayah-preview{
-  font-family:'Amiri', serif;
+  font-family:"MushafiQuran", serif !important;
   font-size:23px;
   line-height:2;
   color:#00442f;
