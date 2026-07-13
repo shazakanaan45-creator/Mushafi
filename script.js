@@ -4,6 +4,19 @@ let currentSurahIndex = null;
 let currentAyahIndex = null;
 let selectedAyah = null;
 let currentFilter = "all";
+let quranAudio = new Audio();
+
+let currentAudioUrls = [];
+
+let currentAudioAyahIndex = 0;
+
+let loadedAudioSurahId = null;
+
+let isAudioLoading = false;
+
+let selectedReciter =
+  localStorage.getItem("selectedReciter")
+  || "ar.alafasy";
 
 const surahList = document.getElementById("surahList");
 const readerPage = document.getElementById("readerPage");
@@ -283,6 +296,28 @@ function openSurah(
 
   const surah =
     quranData[index];
+  stopSurahAudio();
+
+currentAudioUrls = [];
+
+loadedAudioSurahId = null;
+
+currentAudioAyahIndex =
+  ayahIndex !== null
+    ? ayahIndex
+    : 0;
+
+const reciterSelect =
+  document.getElementById(
+    "reciterSelect"
+  );
+
+if (reciterSelect) {
+
+  reciterSelect.value =
+    selectedReciter;
+
+}
 
   document
     .querySelectorAll(".page-section")
@@ -1966,7 +2001,655 @@ function showToast(message) {
     },2200);
 
 }
+async function loadSurahAudio(
+  surahId,
+  forceReload = false
+) {
 
+  if (
+    !forceReload &&
+    loadedAudioSurahId === surahId &&
+    currentAudioUrls.length
+  ) {
+
+    return true;
+
+  }
+
+  if (isAudioLoading) {
+
+    return false;
+
+  }
+
+  isAudioLoading = true;
+
+  updateAudioStatus(
+    "جاري تحميل التلاوة..."
+  );
+
+  try {
+
+    const response = await fetch(
+
+      `https://api.alquran.cloud/v1/surah/${surahId}/${selectedReciter}`
+
+    );
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Audio request failed"
+      );
+
+    }
+
+    const result =
+      await response.json();
+
+    if (
+      !result.data ||
+      !result.data.ayahs
+    ) {
+
+      throw new Error(
+        "Audio data unavailable"
+      );
+
+    }
+
+    currentAudioUrls =
+      result.data.ayahs.map(
+        ayah => ayah.audio
+      );
+
+    loadedAudioSurahId =
+      surahId;
+
+    updateAudioStatus(
+      "جاهز للتشغيل"
+    );
+
+    return true;
+
+  } catch (error) {
+
+    console.error(
+      "Audio error:",
+      error
+    );
+
+    currentAudioUrls = [];
+
+    updateAudioStatus(
+      "تعذر تحميل التلاوة"
+    );
+
+    showToast(
+      "تعذر تحميل صوت القارئ"
+    );
+
+    return false;
+
+  } finally {
+
+    isAudioLoading = false;
+
+  }
+
+}
+
+
+async function toggleSurahAudio() {
+
+  if (
+    currentSurahIndex === null
+  ) {
+
+    return;
+
+  }
+
+  if (
+    !quranAudio.paused &&
+    !quranAudio.ended
+  ) {
+
+    quranAudio.pause();
+
+    updateAudioPlayButton(false);
+
+    updateAudioStatus(
+      "متوقف مؤقتاً"
+    );
+
+    return;
+
+  }
+
+  if (
+    quranAudio.src &&
+    quranAudio.currentTime > 0 &&
+    !quranAudio.ended
+  ) {
+
+    try {
+
+      await quranAudio.play();
+
+      updateAudioPlayButton(true);
+
+      updateAudioStatus(
+        "جاري الاستماع"
+      );
+
+    } catch (error) {
+
+      showToast(
+        "تعذر تشغيل الصوت"
+      );
+
+    }
+
+    return;
+
+  }
+
+  const surah =
+    quranData[currentSurahIndex];
+
+  const loaded =
+    await loadSurahAudio(
+      surah.id
+    );
+
+  if (!loaded) {
+
+    return;
+
+  }
+
+  let startIndex = 0;
+
+  const savedAyah =
+    localStorage.getItem(
+      "lastAyahIndex"
+    );
+
+  if (
+    savedAyah !== null &&
+    Number(savedAyah) <
+      surah.ayahs.length
+  ) {
+
+    startIndex =
+      Number(savedAyah);
+
+  }
+
+  playAudioAyah(
+    startIndex
+  );
+
+}
+
+
+async function playAudioAyah(index) {
+
+  if (
+    currentSurahIndex === null
+  ) {
+
+    return;
+
+  }
+
+  const surah =
+    quranData[currentSurahIndex];
+
+  if (
+    index < 0 ||
+    index >= surah.ayahs.length
+  ) {
+
+    stopSurahAudio();
+
+    return;
+
+  }
+
+  if (
+    loadedAudioSurahId !==
+      surah.id ||
+    !currentAudioUrls.length
+  ) {
+
+    const loaded =
+      await loadSurahAudio(
+        surah.id
+      );
+
+    if (!loaded) {
+
+      return;
+
+    }
+
+  }
+
+  const audioUrl =
+    currentAudioUrls[index];
+
+  if (!audioUrl) {
+
+    showToast(
+      "الصوت غير متوفر لهذه الآية"
+    );
+
+    return;
+
+  }
+
+  quranAudio.pause();
+
+  quranAudio.src =
+    audioUrl;
+
+  currentAudioAyahIndex =
+    index;
+
+  quranAudio.currentTime = 0;
+
+  localStorage.setItem(
+    "lastAyahIndex",
+    index
+  );
+
+  highlightAudioAyah(
+    index
+  );
+
+  updateAudioAyahInfo();
+
+  updateAudioStatus(
+    "جاري الاستماع"
+  );
+
+  try {
+
+    await quranAudio.play();
+
+    updateAudioPlayButton(true);
+
+  } catch (error) {
+
+    console.error(
+      "Playback error:",
+      error
+    );
+
+    updateAudioPlayButton(false);
+
+    updateAudioStatus(
+      "تعذر تشغيل الصوت"
+    );
+
+    showToast(
+      "تعذر تشغيل التلاوة"
+    );
+
+  }
+
+}
+
+
+function nextAudioAyah() {
+
+  if (
+    currentSurahIndex === null
+  ) {
+
+    return;
+
+  }
+
+  playAudioAyah(
+    currentAudioAyahIndex + 1
+  );
+
+}
+
+
+function previousAudioAyah() {
+
+  if (
+    currentSurahIndex === null
+  ) {
+
+    return;
+
+  }
+
+  playAudioAyah(
+    currentAudioAyahIndex - 1
+  );
+
+}
+
+
+function stopSurahAudio() {
+
+  quranAudio.pause();
+
+  quranAudio.currentTime = 0;
+
+  quranAudio.removeAttribute(
+    "src"
+  );
+
+  quranAudio.load();
+
+  updateAudioPlayButton(false);
+
+  updateAudioStatus(
+    "جاهز للتشغيل"
+  );
+
+  const progressBar =
+    document.getElementById(
+      "audioProgressBar"
+    );
+
+  if (progressBar) {
+
+    progressBar.style.width =
+      "0%";
+
+  }
+
+  document
+    .querySelectorAll(
+      ".ayah.audio-active"
+    )
+    .forEach(ayah => {
+
+      ayah.classList.remove(
+        "audio-active"
+      );
+
+    });
+
+}
+
+
+function highlightAudioAyah(index) {
+
+  document
+    .querySelectorAll(
+      ".ayah.audio-active"
+    )
+    .forEach(ayah => {
+
+      ayah.classList.remove(
+        "audio-active"
+      );
+
+    });
+
+  const target =
+    ayahContainer.querySelector(
+
+      `[data-ayah-index="${index}"]`
+
+    );
+
+  if (!target) {
+
+    return;
+
+  }
+
+  target.classList.add(
+    "audio-active"
+  );
+
+  target.scrollIntoView({
+
+    behavior:"smooth",
+
+    block:"center"
+
+  });
+
+}
+
+
+function updateAudioAyahInfo() {
+
+  if (
+    currentSurahIndex === null
+  ) {
+
+    return;
+
+  }
+
+  const surah =
+    quranData[currentSurahIndex];
+
+  const info =
+    document.getElementById(
+      "audioAyahInfo"
+    );
+
+  if (info) {
+
+    info.innerText =
+
+      `سورة ${surah.name} • الآية ${currentAudioAyahIndex + 1} من ${surah.ayahs.length}`;
+
+  }
+
+}
+
+
+function updateAudioStatus(text) {
+
+  const status =
+    document.getElementById(
+      "audioStatus"
+    );
+
+  if (status) {
+
+    status.innerText =
+      text;
+
+  }
+
+}
+
+
+function updateAudioPlayButton(
+  playing
+) {
+
+  const button =
+    document.getElementById(
+      "audioPlayButton"
+    );
+
+  if (!button) {
+
+    return;
+
+  }
+
+  if (playing) {
+
+    button.innerHTML = `
+      ⏸
+      <span>إيقاف مؤقت</span>
+    `;
+
+  } else {
+
+    button.innerHTML = `
+      ▶
+      <span>تشغيل</span>
+    `;
+
+  }
+
+}
+
+
+async function changeReciter() {
+
+  const select =
+    document.getElementById(
+      "reciterSelect"
+    );
+
+  selectedReciter =
+    select.value;
+
+  localStorage.setItem(
+
+    "selectedReciter",
+
+    selectedReciter
+
+  );
+
+  stopSurahAudio();
+
+  currentAudioUrls = [];
+
+  loadedAudioSurahId = null;
+
+  if (
+    currentSurahIndex !== null
+  ) {
+
+    const surah =
+      quranData[currentSurahIndex];
+
+    await loadSurahAudio(
+
+      surah.id,
+
+      true
+
+    );
+
+  }
+
+  showToast(
+    "تم تغيير القارئ"
+  );
+
+}
+
+
+quranAudio.addEventListener(
+  "ended",
+  () => {
+
+    if (
+      currentSurahIndex === null
+    ) {
+
+      return;
+
+    }
+
+    const surah =
+      quranData[currentSurahIndex];
+
+    if (
+      currentAudioAyahIndex <
+      surah.ayahs.length - 1
+    ) {
+
+      playAudioAyah(
+
+        currentAudioAyahIndex + 1
+
+      );
+
+    } else {
+
+      updateAudioPlayButton(false);
+
+      updateAudioStatus(
+        "تمت السورة"
+      );
+
+      showToast(
+        "تمت السورة ✨"
+      );
+
+    }
+
+  }
+);
+
+
+quranAudio.addEventListener(
+  "timeupdate",
+  () => {
+
+    if (
+      !quranAudio.duration ||
+      Number.isNaN(
+        quranAudio.duration
+      )
+    ) {
+
+      return;
+
+    }
+
+    const percent =
+
+      (
+        quranAudio.currentTime /
+        quranAudio.duration
+      ) * 100;
+
+    const progressBar =
+      document.getElementById(
+        "audioProgressBar"
+      );
+
+    if (progressBar) {
+
+      progressBar.style.width =
+
+        Math.min(
+          100,
+          percent
+        ) + "%";
+
+    }
+
+  }
+);
+
+
+quranAudio.addEventListener(
+  "error",
+  () => {
+
+    updateAudioPlayButton(false);
+
+    updateAudioStatus(
+      "حدث خطأ في الصوت"
+    );
+
+  }
+);
 
 window.addEventListener(
   "load",
