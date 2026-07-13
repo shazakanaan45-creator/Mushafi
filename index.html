@@ -17,58 +17,393 @@
 
   <main class="container">
 
-    <section class="home-card">
-      <h2>متابعة القراءة</h2>
-      <p id="lastRead">لم يتم حفظ قراءة بعد</p>
-      <button onclick="continueReading()">متابعة</button>
+    <section id="homePage" class="page-section">
+
+      <section class="home-card">
+        <div>
+          <span class="eyebrow">آخر قراءة</span>
+          <h2>متابعة القراءة</h2>
+          <p id="lastRead">لم يتم حفظ قراءة بعد</p>
+        </div>
+
+        <button onclick="continueReading()">متابعة</button>
+      </section>
+
+      <section class="feature-grid">
+
+        <article class="feature-card daily-card">
+          <div class="feature-icon">◈</div>
+
+          <div>
+            <span class="eyebrow">وردك اليومي</span>
+            <h3 id="dailyGoalTitle">10 آيات يومياً</h3>
+            <p id="dailyGoalText">
+              ابدئي وردك اليومي وحافظي على الاستمرارية
+            </p>
+          </div>
+
+          <div class="progress-wrap">
+            <div class="progress-track">
+              <div id="dailyProgressBar" class="progress-bar"></div>
+            </div>
+
+            <span id="dailyProgressText">0 / 10</span>
+          </div>
+
+          <div class="card-actions">
+            <button onclick="startDailyWird()">ابدئي الورد</button>
+            <button class="ghost-btn" onclick="openDailyGoalModal()">
+              تعديل
+            </button>
+          </div>
+        </article>
+
+        <article class="feature-card verse-card">
+          <div class="feature-icon">۞</div>
+
+          <div>
+            <span class="eyebrow">آية اليوم</span>
+
+            <p id="dailyVerseText" class="daily-verse">
+              جاري اختيار آية اليوم...
+            </p>
+
+            <span id="dailyVerseSource" class="verse-source"></span>
+          </div>
+
+          <div class="card-actions">
+            <button onclick="copyDailyVerse()">نسخ الآية</button>
+
+            <button class="ghost-btn" onclick="shareDailyVerse()">
+              مشاركة
+            </button>
+          </div>
+        </article>
+
+        <article class="feature-card streak-card">
+          <div class="streak-number" id="streakDays">0</div>
+
+          <div>
+            <span class="eyebrow">الاستمرارية</span>
+            <h3>أيام متتالية</h3>
+            <p>كل يوم قراءة يصنع عادة أجمل</p>
+          </div>
+        </article>
+
+      </section>
+
+      <div class="search-box">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="ابحث عن اسم السورة أو رقمها..."
+          oninput="searchSurah()"
+        />
+      </div>
+
+      <section>
+
+        <div class="section-heading-row">
+
+          <h2 class="section-title">فهرس السور</h2>
+
+          <div class="filter-tabs">
+
+            <button
+              class="filter-btn active"
+              onclick="filterSurahs('all', this)"
+            >
+              الكل
+            </button>
+
+            <button
+              class="filter-btn"
+              onclick="filterSurahs('مكية', this)"
+            >
+              مكية
+            </button>
+
+            <button
+              class="filter-btn"
+              onclick="filterSurahs('مدنية', this)"
+            >
+              مدنية
+            </button>
+
+          </div>
+
+        </div>
+
+        <div id="surahList" class="surah-list"></div>
+
+      </section>
+
     </section>
 
-    <div class="search-box">
-      <input
-        type="text"
-        id="searchInput"
-        placeholder="ابحث عن اسم السورة..."
-        oninput="searchSurah()"
-      />
-    </div>
 
-    <section>
-      <h2 class="section-title">فهرس السور</h2>
-      <div id="surahList" class="surah-list"></div>
+    <section id="bookmarksPage" class="page-section hidden">
+
+      <div class="page-head">
+        <span class="eyebrow">محفوظاتك</span>
+        <h2 class="section-title">الآيات المحفوظة</h2>
+      </div>
+
+      <div id="bookmarksList" class="bookmarks-list"></div>
+
     </section>
+
+
+    <section id="tasbihPage" class="page-section hidden">
+
+      <div class="tasbih-card">
+
+        <span class="eyebrow">المسبحة</span>
+
+        <h2>اذكر الله</h2>
+
+        <select id="tasbihPhrase" onchange="changeTasbihPhrase()">
+          <option>سبحان الله</option>
+          <option>الحمد لله</option>
+          <option>الله أكبر</option>
+          <option>أستغفر الله</option>
+          <option>لا إله إلا الله</option>
+        </select>
+
+        <button
+          id="tasbihButton"
+          class="tasbih-button"
+          onclick="incrementTasbih()"
+        >
+          <span id="tasbihCount">0</span>
+          <small>اضغطي للتسبيح</small>
+        </button>
+
+        <div class="tasbih-target">
+
+          <span id="tasbihTargetText">0 / 33</span>
+
+          <div class="progress-track">
+            <div
+              id="tasbihProgressBar"
+              class="progress-bar"
+            ></div>
+          </div>
+
+        </div>
+
+        <div class="tasbih-actions">
+
+          <button onclick="changeTasbihTarget()">
+            تغيير الهدف
+          </button>
+
+          <button
+            class="ghost-btn"
+            onclick="resetTasbih()"
+          >
+            تصفير
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
 
     <section id="readerPage" class="reader-page hidden">
 
       <div class="surah-header">
+
         <div class="ornament">❈ ❈ ❈</div>
+
         <h2 id="surahTitle"></h2>
+
         <p id="surahInfo"></p>
+
         <div class="ornament">❈ ❈ ❈</div>
+
       </div>
 
       <div id="ayahContainer" class="ayah-container"></div>
 
       <div class="reader-actions">
-        <button onclick="backToHome()">↩<span>رجوع</span></button>
-        <button onclick="decreaseFont()">A−<span>تصغير</span></button>
-        <button onclick="increaseFont()">A+<span>تكبير</span></button>
-        <button onclick="toggleDarkMode()">🌙<span>ليلي</span></button>
+
+        <button onclick="backToHome()">
+          ↩
+          <span>رجوع</span>
+        </button>
+
+        <button onclick="decreaseFont()">
+          A−
+          <span>تصغير</span>
+        </button>
+
+        <button onclick="increaseFont()">
+          A+
+          <span>تكبير</span>
+        </button>
+
+        <button onclick="toggleDarkMode()">
+          🌙
+          <span>ليلي</span>
+        </button>
+
       </div>
 
     </section>
 
   </main>
 
+
+  <nav id="bottomNav" class="bottom-nav">
+
+    <button
+      class="nav-btn active"
+      data-page="homePage"
+      onclick="showPage('homePage', this)"
+    >
+      <span>⌂</span>
+      <small>الرئيسية</small>
+    </button>
+
+    <button
+      class="nav-btn"
+      data-page="bookmarksPage"
+      onclick="showPage('bookmarksPage', this)"
+    >
+      <span>🔖</span>
+      <small>المحفوظات</small>
+    </button>
+
+    <button
+      class="nav-btn"
+      data-page="tasbihPage"
+      onclick="showPage('tasbihPage', this)"
+    >
+      <span>◉</span>
+      <small>المسبحة</small>
+    </button>
+
+  </nav>
+
+
+  <div
+    id="ayahActionSheet"
+    class="action-sheet hidden"
+    onclick="closeAyahActions(event)"
+  >
+
+    <div class="action-sheet-panel">
+
+      <div class="sheet-handle"></div>
+
+      <h3 id="selectedAyahTitle">خيارات الآية</h3>
+
+      <p
+        id="selectedAyahPreview"
+        class="selected-ayah-preview"
+      ></p>
+
+      <div class="action-grid">
+
+        <button onclick="saveSelectedAyah()">
+          🔖
+          <span>حفظ</span>
+        </button>
+
+        <button onclick="copySelectedAyah()">
+          📋
+          <span>نسخ</span>
+        </button>
+
+        <button onclick="shareSelectedAyah()">
+          📤
+          <span>مشاركة</span>
+        </button>
+
+      </div>
+
+      <button
+        class="close-sheet"
+        onclick="closeAyahActions()"
+      >
+        إغلاق
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div
+    id="dailyGoalModal"
+    class="action-sheet hidden"
+    onclick="closeDailyGoalModal(event)"
+  >
+
+    <div class="action-sheet-panel">
+
+      <div class="sheet-handle"></div>
+
+      <h3>تحديد الورد اليومي</h3>
+
+      <p class="modal-note">
+        اختاري عدد الآيات التي تريدين قراءتها يومياً.
+      </p>
+
+      <div class="goal-options">
+
+        <button onclick="setDailyGoal(5)">
+          5 آيات
+        </button>
+
+        <button onclick="setDailyGoal(10)">
+          10 آيات
+        </button>
+
+        <button onclick="setDailyGoal(20)">
+          20 آية
+        </button>
+
+        <button onclick="setDailyGoal(50)">
+          50 آية
+        </button>
+
+      </div>
+
+      <button
+        class="close-sheet"
+        onclick="closeDailyGoalModal()"
+      >
+        إغلاق
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div id="toast" class="toast"></div>
+
+
   <footer class="app-footer">
-    <p>Designed & Developed by <strong>Shaza K.</strong></p>
-    <span>Version 1.0.0</span>
+    <p>
+      Designed & Developed by
+      <strong>Shaza K.</strong>
+    </p>
+
+    <span>Version 1.1.0</span>
   </footer>
 
+
   <script src="script.js"></script>
+
   <script>
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("service-worker.js");
     }
   </script>
+
 </body>
 </html>
