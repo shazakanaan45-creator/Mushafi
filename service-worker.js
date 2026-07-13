@@ -1,4 +1,4 @@
-const CACHE_NAME = "mushafi-v13";
+const CACHE_NAME = "mushafi-v15";
 
 const FILES_TO_CACHE = [
   "./",
@@ -7,7 +7,8 @@ const FILES_TO_CACHE = [
   "./script.js",
   "./manifest.json",
   "./icon-192.png",
-  "./icon-512.png"
+  "./icon-512.png",
+  "./fonts/AmiriQuran.ttf"
 ];
 
 self.addEventListener("install", event => {
@@ -35,29 +36,9 @@ self.addEventListener("activate", event => {
 });
 
 self.addEventListener("fetch", event => {
-
-  if (event.request.method !== "GET") {
-    return;
-  }
-
   event.respondWith(
-    fetch(event.request)
-      .then(networkResponse => {
-
-        const responseClone = networkResponse.clone();
-
-        caches.open(CACHE_NAME).then(cache => {
-          cache.put(event.request, responseClone);
-        });
-
-        return networkResponse;
-
-      })
-      .catch(() => {
-
-        return caches.match(event.request);
-
-      })
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request);
+    })
   );
-
 });
