@@ -13,10 +13,8 @@ body{
   font-family:Arial, Tahoma, sans-serif;
   background:radial-gradient(circle at top right,#fff8e8 0,#f6eedc 40%,#efe3c8 100%);
   color:#082f23;
-  padding-bottom:95px;
+  padding-bottom:110px;
 }
-
-/* Header */
 
 .app-header{
   background:linear-gradient(135deg,#003f2d,#006b4a);
@@ -38,8 +36,6 @@ body{
   font-size:17px;
 }
 
-/* Layout */
-
 .container{
   width:94%;
   max-width:1100px;
@@ -51,7 +47,13 @@ body{
   display:none !important;
 }
 
-/* Home Card */
+.eyebrow{
+  display:block;
+  color:#bd8d2f;
+  font-size:13px;
+  font-weight:bold;
+  margin-bottom:7px;
+}
 
 .home-card{
   background:linear-gradient(135deg,#00442f,#006847);
@@ -61,6 +63,14 @@ body{
   margin-bottom:24px;
   box-shadow:0 12px 35px rgba(0,0,0,.2);
   border:1px solid rgba(255,215,130,.45);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.home-card .eyebrow{
+  color:#f7d27a;
 }
 
 .home-card h2{
@@ -70,11 +80,8 @@ body{
 }
 
 .home-card p{
-  margin-bottom:18px;
   color:#fff7df;
 }
-
-/* General Buttons */
 
 button{
   background:linear-gradient(135deg,#f4d47e,#bd8d2f);
@@ -94,7 +101,125 @@ button:hover{
   transform:translateY(-2px);
 }
 
-/* Search */
+.ghost-btn{
+  background:transparent;
+  border:1px solid #c9a548;
+  color:#8a6a1f;
+  box-shadow:none;
+}
+
+.feature-grid{
+  display:grid;
+  grid-template-columns:1.2fr 1fr .7fr;
+  gap:16px;
+  margin-bottom:24px;
+}
+
+.feature-card{
+  background:#fffaf0;
+  border:1px solid rgba(199,164,73,.45);
+  border-radius:24px;
+  padding:22px;
+  box-shadow:0 8px 22px rgba(0,0,0,.1);
+}
+
+.feature-card h3{
+  color:#00442f;
+  margin-bottom:7px;
+}
+
+.feature-card p{
+  color:#5e665f;
+  line-height:1.8;
+}
+
+.feature-icon{
+  width:46px;
+  height:46px;
+  border-radius:15px;
+  background:linear-gradient(135deg,#f4d47e,#bd8d2f);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  color:#00442f;
+  margin-bottom:16px;
+}
+
+.card-actions{
+  display:flex;
+  gap:10px;
+  margin-top:18px;
+}
+
+.card-actions button{
+  flex:1;
+  padding:11px 14px;
+  font-size:14px;
+}
+
+.progress-wrap{
+  margin-top:18px;
+}
+
+.progress-track{
+  height:9px;
+  background:rgba(189,141,47,.18);
+  border-radius:50px;
+  overflow:hidden;
+}
+
+.progress-bar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#bd8d2f,#f4d47e);
+  border-radius:50px;
+  transition:.3s;
+}
+
+#dailyProgressText,
+#tasbihTargetText{
+  display:block;
+  margin-top:8px;
+  color:#8a6a1f;
+  font-size:13px;
+}
+
+.daily-verse{
+  font-size:20px;
+  color:#00442f !important;
+  font-family:'Amiri', serif;
+}
+
+.verse-source{
+  display:block;
+  margin-top:12px;
+  color:#8a6a1f;
+  font-size:13px;
+}
+
+.streak-card{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  text-align:center;
+}
+
+.streak-number{
+  width:92px;
+  height:92px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,#00442f,#006847);
+  color:#f7d27a;
+  border:3px solid #d7b55b;
+  font-size:38px;
+  font-weight:bold;
+  margin-bottom:16px;
+}
 
 .search-box{
   margin-bottom:24px;
@@ -112,14 +237,37 @@ button:hover{
   font-family:Arial, Tahoma, sans-serif;
 }
 
-.section-title{
+.section-heading-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:18px;
   margin:20px 0 15px;
-  font-size:26px;
-  color:#00442f;
-  font-family:Arial, Tahoma, sans-serif;
 }
 
-/* Surah List */
+.section-title{
+  font-size:26px;
+  color:#00442f;
+}
+
+.filter-tabs{
+  display:flex;
+  gap:8px;
+}
+
+.filter-btn{
+  padding:8px 16px;
+  box-shadow:none;
+  background:#fffaf0;
+  border:1px solid #d7b55b;
+  color:#8a6a1f;
+  font-size:13px;
+}
+
+.filter-btn.active{
+  background:linear-gradient(135deg,#00442f,#006847);
+  color:#f7d27a;
+}
 
 .surah-list{
   display:grid;
@@ -152,17 +300,11 @@ button:hover{
   margin-bottom:6px;
   font-weight:700;
   line-height:1.6;
-  letter-spacing:0;
-  white-space:normal;
-  font-family:Arial, Tahoma, sans-serif !important;
 }
 
 .surah-card span{
   color:#8a6a1f;
   font-size:14px;
-  background:none;
-  padding:0;
-  font-family:Arial, Tahoma, sans-serif;
 }
 
 .surah-number{
@@ -177,7 +319,6 @@ button:hover{
   justify-content:center;
   font-weight:bold;
   box-shadow:0 4px 12px rgba(0,0,0,.15);
-  font-family:Arial, Tahoma, sans-serif;
 }
 
 .surah-arrow{
@@ -186,8 +327,6 @@ button:hover{
   font-size:28px;
   font-weight:bold;
 }
-
-/* Reader */
 
 .reader-page{
   margin-top:20px;
@@ -210,7 +349,6 @@ button:hover{
   font-size:42px;
   margin:10px 0;
   font-weight:bold;
-  font-family:Arial, Tahoma, sans-serif;
   text-align:center;
   text-shadow:0 2px 5px rgba(0,0,0,.4);
 }
@@ -219,7 +357,6 @@ button:hover{
   color:#FFF7DD;
   font-size:18px;
   margin-top:8px;
-  font-family:Arial, Tahoma, sans-serif;
 }
 
 .ornament{
@@ -228,17 +365,13 @@ button:hover{
   letter-spacing:8px;
 }
 
-/* Bottom Toolbar */
-
 .reader-actions{
   position:fixed;
   bottom:0;
   left:0;
   right:0;
-  top:auto;
   z-index:9999;
   display:flex;
-  flex-direction:row;
   justify-content:space-between;
   align-items:center;
   gap:8px;
@@ -250,7 +383,6 @@ button:hover{
 
 .reader-actions button{
   flex:1;
-  width:auto;
   min-width:0;
   background:rgba(255,255,255,.12);
   color:#f7d27a;
@@ -258,14 +390,8 @@ button:hover{
   border-radius:16px;
   padding:8px 4px;
   font-size:18px;
-  font-weight:bold;
   box-shadow:none;
   white-space:nowrap;
-}
-
-.reader-actions button:hover{
-  transform:none;
-  background:rgba(255,255,255,.2);
 }
 
 .reader-actions button span{
@@ -275,8 +401,6 @@ button:hover{
   color:#fff7df;
   font-weight:normal;
 }
-
-/* Ayahs */
 
 .ayah-container{
   background:#fffaf0;
@@ -292,8 +416,16 @@ button:hover{
 .ayah{
   text-align:center;
   margin-bottom:24px;
-  padding-bottom:18px;
+  padding:18px 10px;
   border-bottom:1px dashed rgba(199,164,73,.35);
+  border-radius:18px;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.ayah:hover,
+.ayah:active{
+  background:#fff4d8;
 }
 
 .ayahNumber{
@@ -322,10 +454,267 @@ button:hover{
   font-size:42px;
   color:#006847;
   line-height:2;
-  text-shadow:0 1px 2px rgba(0,0,0,.15);
 }
 
-/* Footer */
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  z-index:9000;
+  background:linear-gradient(135deg,#003f2d,#006847);
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  padding:10px 12px calc(10px + env(safe-area-inset-bottom));
+  box-shadow:0 -6px 25px rgba(0,0,0,.25);
+}
+
+.nav-btn{
+  width:min(180px,30%);
+  background:transparent;
+  border:1px solid transparent;
+  box-shadow:none;
+  color:#fff7df;
+  border-radius:18px;
+  padding:8px 10px;
+}
+
+.nav-btn span{
+  display:block;
+  font-size:21px;
+  color:#f7d27a;
+}
+
+.nav-btn small{
+  display:block;
+  margin-top:3px;
+}
+
+.nav-btn.active{
+  background:rgba(255,255,255,.12);
+  border-color:rgba(247,210,122,.35);
+}
+
+.bookmarks-list{
+  display:grid;
+  gap:14px;
+}
+
+.bookmark-card{
+  background:#fffaf0;
+  border:1px solid rgba(199,164,73,.45);
+  border-radius:22px;
+  padding:20px;
+  box-shadow:0 8px 22px rgba(0,0,0,.1);
+}
+
+.bookmark-card p{
+  font-family:'Amiri', serif;
+  color:#00442f;
+  font-size:25px;
+  line-height:2;
+}
+
+.bookmark-meta{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-top:12px;
+  color:#8a6a1f;
+  font-size:13px;
+}
+
+.bookmark-meta button{
+  padding:7px 12px;
+  font-size:12px;
+  background:transparent;
+  color:#9c2d2d;
+  border:1px solid rgba(156,45,45,.35);
+  box-shadow:none;
+}
+
+.empty-state{
+  text-align:center;
+  background:#fffaf0;
+  border:1px dashed #d7b55b;
+  border-radius:22px;
+  padding:42px 20px;
+  color:#8a6a1f;
+}
+
+.tasbih-card{
+  max-width:620px;
+  margin:20px auto;
+  background:#fffaf0;
+  border:1px solid rgba(199,164,73,.45);
+  border-radius:30px;
+  padding:30px;
+  text-align:center;
+  box-shadow:0 12px 35px rgba(0,0,0,.14);
+}
+
+.tasbih-card h2{
+  color:#00442f;
+  font-size:34px;
+  margin-bottom:20px;
+}
+
+#tasbihPhrase{
+  width:100%;
+  padding:14px 18px;
+  border-radius:50px;
+  border:1px solid #d7b55b;
+  background:#fffdf7;
+  color:#00442f;
+  font-size:18px;
+  outline:none;
+  margin-bottom:24px;
+}
+
+.tasbih-button{
+  width:230px;
+  height:230px;
+  border-radius:50%;
+  margin:10px auto 26px;
+  background:linear-gradient(135deg,#00442f,#006847);
+  color:#f7d27a;
+  border:5px solid #d7b55b;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 15px 35px rgba(0,0,0,.22);
+}
+
+.tasbih-button span{
+  font-size:72px;
+  line-height:1;
+}
+
+.tasbih-button small{
+  margin-top:12px;
+  color:#fff7df;
+}
+
+.tasbih-target{
+  max-width:380px;
+  margin:auto;
+}
+
+.tasbih-actions{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  margin-top:22px;
+}
+
+.action-sheet{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.48);
+  z-index:12000;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  padding:16px;
+}
+
+.action-sheet-panel{
+  width:min(600px,100%);
+  background:#fffaf0;
+  border:1px solid #d7b55b;
+  border-radius:28px 28px 20px 20px;
+  padding:22px;
+  box-shadow:0 20px 60px rgba(0,0,0,.35);
+}
+
+.sheet-handle{
+  width:58px;
+  height:5px;
+  border-radius:50px;
+  background:#d8c89b;
+  margin:0 auto 18px;
+}
+
+.action-sheet-panel h3{
+  color:#00442f;
+  text-align:center;
+  font-size:23px;
+}
+
+.selected-ayah-preview{
+  font-family:'Amiri', serif;
+  font-size:23px;
+  line-height:2;
+  color:#00442f;
+  text-align:center;
+  margin:18px 0;
+  max-height:180px;
+  overflow:auto;
+}
+
+.action-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+
+.action-grid button{
+  border-radius:18px;
+  padding:16px 10px;
+}
+
+.action-grid button span{
+  display:block;
+  margin-top:6px;
+  font-size:12px;
+}
+
+.close-sheet{
+  width:100%;
+  margin-top:14px;
+  background:transparent;
+  color:#8a6a1f;
+  border:1px solid #d7b55b;
+  box-shadow:none;
+}
+
+.modal-note{
+  text-align:center;
+  color:#666;
+  margin:12px 0 18px;
+}
+
+.goal-options{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:105px;
+  transform:translateX(-50%) translateY(20px);
+  background:#003f2d;
+  color:#fff7df;
+  border:1px solid #d7b55b;
+  border-radius:50px;
+  padding:12px 20px;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:15000;
+  box-shadow:0 10px 25px rgba(0,0,0,.25);
+  white-space:nowrap;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
 
 .app-footer{
   text-align:center;
@@ -334,7 +723,6 @@ button:hover{
   color:#666;
   border-top:1px solid rgba(0,0,0,.08);
   font-size:15px;
-  font-family:Arial, Tahoma, sans-serif;
 }
 
 .app-footer strong{
@@ -348,31 +736,33 @@ button:hover{
   color:#999;
 }
 
-/* Dark Mode */
-
 .dark{
   background:linear-gradient(135deg,#061b15,#0b3327);
   color:white;
 }
 
-.dark .home-card,
-.dark .ayah-container{
+.dark .feature-card,
+.dark .ayah-container,
+.dark .bookmark-card,
+.dark .tasbih-card,
+.dark .action-sheet-panel,
+.dark .empty-state{
   background:#102820;
   color:white;
 }
 
-.dark .reader-actions{
-  background:linear-gradient(135deg,#003f2d,#006847);
+.dark .feature-card h3,
+.dark .daily-verse,
+.dark .bookmark-card p,
+.dark .tasbih-card h2,
+.dark .action-sheet-panel h3,
+.dark .selected-ayah-preview{
+  color:#F7D27A !important;
 }
 
-.dark .reader-actions button{
-  background:rgba(255,255,255,.1);
-  color:#F7D27A;
-  border:1px solid rgba(247,210,122,.45);
-}
-
-.dark .reader-actions button span{
-  color:#fff7df;
+.dark .feature-card p,
+.dark .modal-note{
+  color:#e5e0ce;
 }
 
 .dark .surah-card{
@@ -394,17 +784,30 @@ button:hover{
   color:#003F2D;
 }
 
-.dark .surah-arrow{
+.dark .surah-arrow,
+.dark .section-title{
   color:#F7D27A;
 }
 
-.dark .section-title{
+.dark input,
+.dark #tasbihPhrase{
+  background:#102820;
+  color:white;
+}
+
+.dark .filter-btn{
+  background:#16352B;
   color:#f7d27a;
 }
 
-.dark input{
-  background:#102820;
-  color:white;
+.dark .filter-btn.active{
+  background:linear-gradient(135deg,#f4d47e,#bd8d2f);
+  color:#003f2d;
+}
+
+.dark .ayah:hover,
+.dark .ayah:active{
+  background:#16352B;
 }
 
 .dark .app-footer{
@@ -420,15 +823,63 @@ button:hover{
   color:#999;
 }
 
-/* Mobile */
+@media(max-width:850px){
+
+  .feature-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .streak-card{
+    grid-column:1 / -1;
+    flex-direction:row;
+    gap:20px;
+    justify-content:flex-start;
+    text-align:right;
+  }
+
+  .streak-number{
+    margin-bottom:0;
+  }
+
+}
 
 @media(max-width:700px){
+
   body{
     padding-bottom:105px;
   }
 
+  .app-header{
+    padding:30px 20px;
+  }
+
   .app-header h1{
     font-size:32px;
+  }
+
+  .home-card{
+    padding:22px;
+  }
+
+  .feature-grid{
+    grid-template-columns:1fr;
+  }
+
+  .streak-card{
+    grid-column:auto;
+  }
+
+  .section-heading-row{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .filter-tabs{
+    width:100%;
+  }
+
+  .filter-btn{
+    flex:1;
   }
 
   .surah-list{
@@ -446,9 +897,6 @@ button:hover{
   }
 
   .reader-actions button{
-    flex:1;
-    width:auto;
-    min-width:0;
     font-size:17px;
     padding:8px 3px;
   }
@@ -468,10 +916,29 @@ button:hover{
 
   .ayah-container{
     font-size:27px;
-    padding:22px;
+    padding:16px;
   }
 
   .basmala{
     font-size:31px;
   }
+
+  .bottom-nav{
+    justify-content:space-around;
+  }
+
+  .nav-btn{
+    width:31%;
+    padding:7px 5px;
+  }
+
+  .tasbih-button{
+    width:200px;
+    height:200px;
+  }
+
+  .tasbih-button span{
+    font-size:64px;
+  }
+
 }
