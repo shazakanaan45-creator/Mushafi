@@ -224,6 +224,62 @@
         <div class="ornament">❈ ❈ ❈</div>
 
       </div>
+      <div class="audio-player">
+
+  <div class="audio-player-head">
+    <div>
+      <span class="audio-label">الاستماع</span>
+      <strong id="audioStatus">جاهز للتشغيل</strong>
+    </div>
+
+    <select id="reciterSelect" onchange="changeReciter()">
+      <option value="ar.alafasy">مشاري راشد العفاسي</option>
+      <option value="ar.minshawi">محمد صديق المنشاوي</option>
+      <option value="ar.sudais">عبدالرحمن السديس</option>
+      <option value="ar.abdulbasit">عبد الباسط عبد الصمد</option>
+      <option value="ar.husary">محمود خليل الحصري</option>
+    </select>
+  </div>
+
+  <div class="audio-controls">
+
+    <button onclick="previousAudioAyah()">
+      ⏮
+      <span>السابقة</span>
+    </button>
+
+    <button
+      id="audioPlayButton"
+      class="audio-main-button"
+      onclick="toggleSurahAudio()"
+    >
+      ▶
+      <span>تشغيل</span>
+    </button>
+
+    <button onclick="nextAudioAyah()">
+      ⏭
+      <span>التالية</span>
+    </button>
+
+    <button onclick="stopSurahAudio()">
+      ■
+      <span>إيقاف</span>
+    </button>
+
+  </div>
+
+  <div class="audio-progress">
+    <div class="audio-progress-track">
+      <div id="audioProgressBar"></div>
+    </div>
+
+    <span id="audioAyahInfo">
+      لم يبدأ التشغيل
+    </span>
+  </div>
+
+</div>
 
       <div id="ayahContainer" class="ayah-container"></div>
 
